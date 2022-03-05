@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ApiController extends Controller
 {
@@ -29,12 +30,28 @@ class ApiController extends Controller
 
     public function respondNotFound($message = "Not Found!")
     {
-        return $this->setStatusCode(self::HTTP_NOT_FOUND)->respondWithError($message);
+        return $this->setStatusCode(Response::HTTP_NOT_FOUND)->respondWithError($message);
     }
 
     public function respondInternalError($message = "Internal Server Error!")
     {
-        return $this->setStatusCode(self::HTTP_INTERNAL_ERROR)->respondWithError($message);
+        return $this->setStatusCode(Response::HTTP_INTERNAL_SERVER_ERROR)->respondWithError($message);
+    }
+
+    public function respondCreated($message)
+    {
+        return $this->setStatusCode(Response::HTTP_CREATED)->respond([
+            'message' => $message,
+            'status_code' => $this->getStatusCode()
+        ]);
+    }
+
+    public function respondDeleted($message)
+    {
+        return $this->setStatusCode(Response::HTTP_NO_CONTENT)->respond([
+            'message' => $message,
+            'status_code' => $this->getStatusCode()
+        ]);
     }
 
     public function respond(array $data, array $headers = [])
@@ -49,14 +66,6 @@ class ApiController extends Controller
                 'message'     => $message,
                 'status_code' => $this->getStatusCode()
             ]
-        ]);
-    }
-
-    public function respondCreated($message)
-    {
-        return $this->setStatusCode(self::HTTP_CREATED)->respond([
-            'message' => $message,
-            'status_code' => $this->getStatusCode()
         ]);
     }
 }

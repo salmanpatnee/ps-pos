@@ -26,18 +26,18 @@ class CategoryRequest extends FormRequest
     public function rules()
     {
         return [
-            'name'        => 'required|string|unique:categories,name|max:100,' . $this->id,
-            'image'       => 'nullable|image',
-            'description' => 'nullable|string|max:500',
+            'name'        => 'required',
+            'image'       => 'nullable',
+            'description' => 'nullable',
         ];
     }
 
-    public function failedValidation(Validator $validator)
-    {
-        throw new HttpResponseException(response()->json([
-            'success'   => false,
-            'message'   => 'Validation errors',
-            'data'      => $validator->errors()
-        ]));
-    }
+    // public function failedValidation(Validator $validator)
+    // {
+    //     throw new HttpResponseException(response()->json([
+    //         'success'   => false,
+    //         'message'   => 'Validation errors',
+    //         'data'      => $validator->errors()
+    //     ]));
+    // }
 }

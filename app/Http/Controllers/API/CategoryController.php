@@ -28,11 +28,11 @@ class CategoryController extends ApiController
      */
     public function store(CategoryRequest $request)
     {
-        $attributes = $request->validated();
+        $category = Category::create($request->validated());
 
-        Category::create($attributes);
+        return new CategoryResource($category);
 
-        return $this->respondCreated('Category created successfully.');
+        // return $this->respondCreated('Category created successfully.');
     }
 
     /**
@@ -59,9 +59,12 @@ class CategoryController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryRequest $request, Category $category)
     {
-        //
+
+        $category->update($request->validated());
+
+        return new CategoryResource($category);
     }
 
     /**
@@ -72,7 +75,15 @@ class CategoryController extends ApiController
      */
     public function destroy($id)
     {
-        //
+        $category = Category::find($id);
+
+        if (!$category) {
+            return $this->respondNotFound('Category does not exist.');
+        }
+
+        $category->delete();
+
+        return $this->respondDeleted('Category deleted successfully.');
     }
 
     public function product_category(Product $product)
